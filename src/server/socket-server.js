@@ -11,11 +11,11 @@ SocketServer.http = require('http').Server(Express.app);
 
 SocketServer.prepareSocketData = function(player, opponent) {
 	var data = {
-		player: {
+		/*player: {
 			x: player.getX(),
 			y: player.getY(),
 			z: player.getZ(),
-		},
+		},*/
 		opponent: {
 			x: opponent.getX(),
 			y: opponent.getY(),

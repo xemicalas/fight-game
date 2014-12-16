@@ -4,6 +4,7 @@ function Player(location) {
 	App = require('../app');
 	this.location = location;
 	this.z = 0;
+	this.speedZ = 0;
 };
 
 Player.prototype.getLocation = function() {
@@ -20,6 +21,14 @@ Player.prototype.getZ = function() {
 
 Player.prototype.setZ = function(z) {
 	this.z = z;
+}
+
+Player.prototype.getSpeedZ = function() {
+	return this.speedZ;
+}
+
+Player.prototype.setSpeedZ = function(speedZ) {
+	this.speedZ = speedZ;
 }
 
 Player.prototype.draw = function() {

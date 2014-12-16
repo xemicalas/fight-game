@@ -8,6 +8,7 @@ Tasks.start();
 SocketServer.listen();
 
 PlayerUpdate.emitData();
+PlayerUpdate.updatePhysics();
 
 io.on('connection', function(socket) {
 
@@ -20,7 +21,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('update', function(data) {
-    SocketServer.updateClient(socket, data);
+    PlayerUpdate.inputs.push(data);
   });
   
 });

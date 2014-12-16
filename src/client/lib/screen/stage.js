@@ -4,13 +4,14 @@ var Point;
 var Background;
 var obj;
 var socket = io();
+var Config;
 
 function StageScreen() {
 	App = require('../../app');
 	GlobalEvents = require('../global-events');
 	Point = require('../canvas/point');
 	Background = require('../canvas/background');
-
+	Config = require('../config');
 	this.backgroundImage = new Background('./img/stage_background.png');
 	obj = this;
 
@@ -66,9 +67,59 @@ StageScreen.prototype.updatePlayers = function() {
 		activeKeys.jumpKey = true;
 	}
 
+	StageScreen.updatePlayerCoordinates(App.player, activeKeys)
+
 	if(activeKeys.key != 0 || activeKeys.jumpKey){
 		socket.emit('update', activeKeys);
 	}
+};
+
+StageScreen.updatePlayerCoordinates = function(player, input) {
+	var key = GlobalEvents.Key;
+	var x = player.getLocation().x;
+	var y = player.getLocation().y;
+	var z = player.getZ();
+	var speedZ = player.getSpeedZ();
+	
+	console.log('key: ' + input.key + ', jump: ' + input.jumpKey);
+
+	if(input.jumpKey && z >= 0) {
+		speedZ = Config.playerJumpSpeed;
+		z -= speedZ;
+	}
+
+	if(input.key == key.UP_LEFT) {
+		y -= Config.playerMoveSpeed;
+		x -= Config.playerMoveSpeed;
+	}
+	else if(input.key == key.UP_RIGHT) {
+		y -= Config.playerMoveSpeed;
+		x += Config.playerMoveSpeed;
+	}
+	else if(input.key == key.DOWN_LEFT) {
+		x -= Config.playerMoveSpeed;
+		y += Config.playerMoveSpeed;
+	}
+	else if(input.key == key.DOWN_RIGHT) {
+		x += Config.playerMoveSpeed;
+		y += Config.playerMoveSpeed;
+	}
+	else if(input.key == key.LEFT) {
+		x -= Config.playerMoveSpeed;
+	}
+	else if(input.key == key.RIGHT) {
+		x += Config.playerMoveSpeed;
+	}
+	else if(input.key == key.UP) {
+		y -= Config.playerMoveSpeed;
+	}
+	else if(input.key == key.DOWN) {
+		y += Config.playerMoveSpeed;
+	}
+
+	player.setLocation(new Point(x, y));
+	player.setZ(z);
+	player.setSpeedZ(speedZ);
 };
 
 StageScreen.prototype.graphics = function() {
